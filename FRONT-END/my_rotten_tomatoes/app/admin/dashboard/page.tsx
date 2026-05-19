@@ -13,7 +13,7 @@ export default function AdminDashboard() {
     <div className="flex h-screen bg-slate-50 font-sans text-slate-800 overflow-hidden">
         
    {/* La barre latérale de gauche*/}   
-      <aside className="w-64 bg-red-900 text-white flex flex-col hidden md:flex shadow-xl">
+      <aside className="w-67 bg-red-900 text-white flex flex-col hidden md:flex shadow-xl">
         <div className="p-6 border-b border-red-850 flex items-center space-x-2">
           <span className="text-2xl"><FaAppleAlt /></span>
           <span className="font-bold text-xl tracking-tight">My_Rotten_Tomatoes</span>
@@ -53,9 +53,7 @@ export default function AdminDashboard() {
       </aside>
 
        
-      <div className="flex-1 flex flex-col overflow-y-auto">
-        
-        
+      <div className="flex-1 flex flex-col overflow-y-auto">       
         <header className="bg-white border-b border-slate-100 px-8 py-4 flex justify-between items-center sticky top-0 z-10">
           <div>
             <h1 className="text-xl font-bold text-slate-900">
@@ -65,15 +63,16 @@ export default function AdminDashboard() {
             </h1>
             <p className="text-xs text-slate-400 mt-0.5">Espace d'administration du site</p>
           </div>
-          <button className="px-4 py-2 border border-slate-200 text-sm font-medium rounded-xl hover:bg-slate-50 transition">
-            Déconnexion
-          </button>
+         <button class="p-3 border border-slate-200 rounded-xl hover:bg-slate-50 transition transform hover:scale-110 active:scale-95 duration-200" aria-label="Déconnexion">
+  
+  <svg class="w-6 h-6 text-slate-600" xmlns="http://w3.org" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
+  </svg>
+</button>
+
         </header>
-
-        
-        <main className="p-8 max-w-7xl w-full mx-auto space-y-6">
-
-          
+       
+        <main className="p-8 max-w-7xl w-full mx-auto space-y-6">         
           {activeTab === 'stats' && (
             <>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -101,7 +100,7 @@ export default function AdminDashboard() {
                 <div className="overflow-x-auto">
                   <table className="w-full text-left border-collapse">
                     <thead>
-                      <tr className="bg-slate-50 text-slate-400 text-xs uppercase font-bold border-b border-slate-100">
+                      <tr className=" p-6 border-b bg-[#E6D3D3] text-xs uppercase font-bold border-slate-100">
                         <th className="px-6 py-4">Film</th>
                         <th className="px-6 py-4">Utilisateur</th>
                         <th className="px-6 py-4">Note</th>
@@ -122,10 +121,10 @@ export default function AdminDashboard() {
             </>
           )}
 
-{/* On gere les fils à parttir de cette ligne*/}
+{/* On gere les films à parttir de cette ligne*/}
           {activeTab === 'movies' && (
             <div className="space-y-6">
-              <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+              <div className="bg-[#F7F7F7] p-6 rounded-2xl border border-slate-100 shadow-sm">
                 <h3 className="font-bold text-slate-900 text-lg mb-2">Importer un film via TMDB</h3>
                 <p className="text-sm text-slate-400 mb-4">On entre l'ID ou le titre exact du film pour l'ajouter automatiquement à notre BDD.</p>
                 <div className="flex gap-3 max-w-xl">
@@ -141,10 +140,17 @@ export default function AdminDashboard() {
               </div>
 {/* CRUD pour les films. Mais Zoul a dit qu'il n' y a pas de CRUD en tant que tel. Donc on doit pouvoir supprimer uniquement*/}
               
-              <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+              <div className="bg-[#F7F7F7] p-6 rounded-2xl border border-slate-100 shadow-sm">
                 <div className="flex justify-between items-center mb-4">
                   <h3 className="font-bold text-slate-900">Films actuellement modifiables</h3>
-                  <button className="text-sm font-semibold text-red-600 hover:underline">+ Ajouter manuellement</button>
+                  <button class="inline-flex items-center gap-2 text-sm font-semibold text-white bg-slate-900 rounded px-4 py-2 transition-colors">
+  <svg class="w-4 h-4 text-white" xmlns="http://w3.org" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+  </svg>
+  
+  <span>Ajouter</span>
+</button>
+
                 </div>
                 <div className="border border-slate-100 rounded-xl p-4 flex items-center justify-between text-sm">
                   <div className="flex items-center space-x-3">
@@ -169,21 +175,21 @@ export default function AdminDashboard() {
  {/* Voici où on va gérer les utilisateurs*/}     
           {activeTab === 'users' && (
             <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-              <div className="p-6 border-b border-slate-100">
-                <h3 className="font-bold text-slate-900">Membres et Rôles</h3>
+              <div className="p-6 border-b bg-[#660120] border-slate-100">
+                <h3 className="font-bold text-white">Membres et Rôles</h3>
               </div>
               <div className="p-4 space-y-3">
                 <div className="flex items-center justify-between p-3 border border-slate-100 rounded-xl text-sm">
                   <div>
                     <p className="font-semibold text-slate-900">Alice Martin</p>
-                    <p className="text-xs text-slate-400">Rôle actuel : <span className="font-semibold text-slate-600">Utilisateur</span></p>
+                    <p className="text-xs text-slate-400">Rôle : <span className="font-semibold text-slate-600">Utilisateur</span></p>
                   </div>
                   <div className="flex space-x-2">
                     <button className="px-3 py-1.5 bg-blue-50 text-blue-600 font-semibold rounded-lg text-xs hover:bg-blue-100 transition">
                       Passer Admin 
                     </button>
                     <button className="px-3 py-1.5 bg-red-50 text-red-600 font-semibold rounded-lg text-xs hover:bg-red-100 transition">
-                      Bannir
+                      Supprimer
                     </button>
                   </div>
                 </div>
