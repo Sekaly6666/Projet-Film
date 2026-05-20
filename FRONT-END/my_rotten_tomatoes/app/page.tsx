@@ -1,9 +1,20 @@
-import Image from "next/image";
+import   Header from "@/components/home/Header" ;
+  import Hero from  "@/components/home/Hero";
+import  MovieSection from    "@/components/home/MovieSection" ;
+import { popularMovies,  recentMovies } from "@/data/homeMovies" ;
 
-export default function Home() {
+export default function  Home()  {
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      Mon dashboard
-    </div>
+    <main className="min-vh-100 bg-dark text-white">
+      
+      <Header />
+      <Hero />
+      <MovieSection id="popular" title="Films populaires" movies={popularMovies} />
+      <MovieSection title="Nouveautes" movies={recentMovies} />
+      
+    </main>
+
   );
+
 }
