@@ -2,9 +2,9 @@ import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { MongooseModule } from '@nestjs/mongoose';
-import { User, UserSchema } from 'src/users/user.schema';
+import { User, UserSchema } from 'src/schemas/User.schema';
 import { UsersModule } from 'src/users/users.module';
-import { LocalStrategy } from './local.strategy';
+import { LocalStrategy } from './dto/local.strategy';
 import { PassportModule } from '@nestjs/passport';
 import { SessionSerializer } from './session.serializer';
 
