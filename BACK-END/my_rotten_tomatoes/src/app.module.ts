@@ -1,20 +1,17 @@
-import { UsersModule } from './users/users.module';
-import { UsersService } from './users/users.service';
-import { UsersController } from './users/users.controller';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConfigModule } from '@nestjs/config';
-
+import { MoviesModule } from './movies/movies.module';
 
 @Module({
   imports: [
-    UsersModule,
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({ isGlobal: true }), 
     MongooseModule.forRoot(`${process.env.URI_MONGODB}`),
+    MoviesModule,
   ],
-  controllers: [UsersController, AppController],
-  providers: [UsersService, AppService],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
