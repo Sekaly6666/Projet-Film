@@ -1,4 +1,4 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus, NotFoundException, Param } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { HttpService } from '@nestjs/axios';
@@ -46,5 +46,16 @@ export class MoviesService {
       );
     }
   }
+
+async delete(id: string) {
+ 
+  const deletedMovie = await this.movieModel.findByIdAndDelete(id).exec();
+  
+  if (!deletedMovie) {
+    throw new NotFoundException(`Le film avec l'ID ${id} n'a pas été trouvé.`);
+  }
+  
+  return { message: 'Film supprimé avec succès', id };
+}
 
 }

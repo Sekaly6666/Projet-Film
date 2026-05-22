@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image"; // Ajout de l'import d'Image Next.js
+import Image from "next/image";
 
 interface Movie {
   _id?: string;
@@ -38,18 +38,13 @@ export default function MovieCard({ movie }: MovieCardProps) {
     <Link 
       href={`/movies?movie=${movie._id || movie.id}`} 
       className="card h-100 bg-secondary text-white text-decoration-none shadow-sm hover-border-warning"
-      style={{ display: "block", border: "1px solid #444", borderRadius: "8px", overflow: "hidden" }}
-    >
+      style={{ display: "block", border: "1px solid #444", borderRadius: "8px", overflow: "hidden" }}>
     
       <div style={{ position: "relative", height: "330px", width: "100%" }}>
-        <Image 
-          src={imageUrl} 
-          alt={movie.title} 
-          fill 
+        <Image src={imageUrl} alt={movie.title} fill 
           sizes="(max-width: 768px) 100vw, 300px"
           className="card-img-top object-cover" 
-          priority 
-        />
+          priority />
       </div>
 
       <div className="card-body p-3 d-flex flex-column gap-2" style={{ backgroundColor: "#212529" }}>
