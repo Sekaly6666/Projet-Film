@@ -1,4 +1,16 @@
-export type Movie= { id: number; title: string; genre: string; year: number;rating: number; image: string; description: string; releaseDate: string; adminPublicationDate: string; };
+interface Movie {
+  _id?: string;
+  id?: number;
+  title: string;
+  overview?: string;
+  description?: string;
+  poster_path?: string;
+  image?: string;
+  vote_average?: number;
+  rating?: number;
+  release_date?: string;
+  year?: number;
+}
 
 
 export const heroMovie ={
