@@ -18,7 +18,7 @@ export class AuthService {
     @InjectModel(User.name) private readonly userModel: Model<UsersDocument>,
     private readonly jwtService: JwtService,
   ) {}
-  
+
   async register(registerDto: RegisterDto) {
     const { username, email, password, password_confirm } = registerDto;
 
@@ -45,14 +45,12 @@ export class AuthService {
 
     const savedUser = await newUser.save();
 
-  
     const userObj = savedUser.toObject();
     const { password: _, ...userCreated } = userObj as any;
-    
+
     return userCreated;
   }
 
-  
   async login(loginDto: LoginDto) {
     const { email, password } = loginDto;
 
@@ -72,7 +70,6 @@ export class AuthService {
       email: user.email,
       role: user.role || 'user',
     };
-
 
     const userObj = user.toObject();
     const { password: _, ...userCreated } = userObj as any;
