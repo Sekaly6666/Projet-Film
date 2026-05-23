@@ -1,28 +1,36 @@
+
 "use client";
 
 import { usePathname } from "next/navigation";
 
-const footerColumns = [
+const footerColumns= [
+
   {
     title: "Découvrez-nous",
     links: ["À propos", "Films populaires", "Nouveautés", "Top notes"],
   },
+
   {
     title: "Besoin d'aide",
     links: ["Aide en ligne", "Contact", "Conditions d'utilisation", "Confidentialité"],
   },
+
   {
     title: "Rotten Movies",
     links: ["Films", "Séries", "Genres", "Commentaires"],
   },
+
   {
     title: "Nos programmes",
     links: ["Action", "Comédie", "Science-fiction", "Animation"],
   },
+
   {
     title: "Nos offres",
     links: ["Regarder", "Télécharger", "Favoris", "Compte utilisateur"],
   },
+  
+
 ];
 
 export default function Footer() {

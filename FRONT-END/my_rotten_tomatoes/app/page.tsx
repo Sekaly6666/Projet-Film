@@ -3,10 +3,18 @@ import { useEffect, useState } from "react";
 import Header from "@/components/home/Header";
 import Hero from "@/components/home/Hero";
 import MovieSection from "@/components/home/MovieSection";
-import { popularMovies } from "@/data/homeMovies";
+
+type Movie = {
+  _id: string;
+  title: string;
+  overview: string;
+  poster_path?: string;
+  vote_average: number;
+  release_date: string;
+};
 
 export default function Home() {
-  const [myMovies, setMyMovies] = useState([]);
+  const [myMovies, setMyMovies] = useState<Movie[]>([]);
 
   useEffect(() => {
     fetch("http://localhost:3001/movies")
@@ -25,7 +33,6 @@ export default function Home() {
         title="Mes Films (TMDB)" 
         movies={myMovies} 
       />
-      <MovieSection id="popular" title="Films populaires" movies={popularMovies} />
     </main>
   );
 }

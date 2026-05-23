@@ -1,6 +1,6 @@
 "use client";
 import Link from 'next/link';
-import { Film, BarChart3, LogOut, ArrowUpRight, RefreshCw, Star, ShieldAlert, Home, Trash2, Loader2 } from 'lucide-react';
+import { Film, BarChart3, ArrowUpRight, RefreshCw, Star, ShieldAlert, Home, Trash2, Loader2 } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import { FaAppleAlt, FaPeopleArrows } from 'react-icons/fa';
 
@@ -346,9 +346,6 @@ const CreateUser = async (e: React.FormEvent) => {
             </h1>
             <p className="text-xs text-slate-400 mt-1">Espace d'administration du site</p>
           </div>
-          <button className="p-2.5 border border-slate-200 rounded-xl hover:bg-slate-50 hover:text-red-600 transition duration-200 flex items-center justify-center shadow-sm" aria-label="Déconnexion">
-            <LogOut className="w-5 h-5 text-slate-600" />
-          </button>
         </header>
        
         <main className="p-8 max-w-7xl w-full mx-auto space-y-8">         

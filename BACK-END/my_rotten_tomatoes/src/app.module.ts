@@ -5,6 +5,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MoviesModule } from './movies/movies.module';
 import { AuthModule } from './auth/auth.module';
+import { ComsModule } from './coms/coms.module';
+import { NotesModule } from './notes/notes.module';
 
 @Module({
   imports: [
@@ -20,6 +22,8 @@ import { AuthModule } from './auth/auth.module';
     }),
     MoviesModule,
     AuthModule,
+    ComsModule,
+    NotesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

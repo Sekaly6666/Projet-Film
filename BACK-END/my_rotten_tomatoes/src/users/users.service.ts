@@ -56,7 +56,12 @@ export class UsersService {
   // update(id: string, updateUserDto: UpdateUserDto) {
   //   return this.userModel.findByIdAndUpdate(id, updateUserDto, { new: true });
   // }
-update(id: string, updateUserDto: UpdateUserDto) {
+async update(id: string, updateUserDto: UpdateUserDto) {
+    if (updateUserDto.password) {
+      const salt = await bcrypt.genSalt(10);
+      updateUserDto.password = await bcrypt.hash(updateUserDto.password, salt);
+    }
+
     return this.userModel.findByIdAndUpdate(id, updateUserDto, { new: true }).exec();
   }
 
