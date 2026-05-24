@@ -22,17 +22,14 @@ interface MovieCardProps {
 export default function MovieCard({ movie }: MovieCardProps) {
  
   const releaseYear = movie.year || (movie.release_date ? new Date(movie.release_date).getFullYear() : "N/A");
-  
-  
   const movieOverview = movie.overview || movie.description || "Aucune description disponible.";
   
-  
   const movieRating = movie.rating || movie.vote_average || 0;
-
-
-  const imageUrl = movie.poster_path 
-    ? `https://image.tmdb.org/t/p/w300${movie.poster_path}`
-:"data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"; 
+  const imageUrl = movie.image 
+    ? movie.image
+    : movie.poster_path 
+      ? `https://image.tmdb.org/t/p/w300${movie.poster_path}`
+      : "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
 
   return (
     <Link 

@@ -624,7 +624,7 @@ const CreateUser = async (e: React.FormEvent) => {
             type="email" 
             value={newEmail}
             onChange={(e) => setNewEmail(e.target.value)}
-            placeholder="Ex: john@example.com" 
+            placeholder="wecode@wecode.com" 
             className="w-full px-4 py-2 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-800 text-sm"
           />
         </div>

@@ -10,6 +10,7 @@ import { Model } from 'mongoose';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import { Movie, MovieDocument } from './movie.schema';
+import { isValidObjectId } from 'mongoose';
 
 @Injectable()
 export class MoviesService {
@@ -85,4 +86,16 @@ export class MoviesService {
       })
       .exec();
   }
+
+   async findById(id: string): Promise<Movie> {
+    if (!isValidObjectId(id)) {
+    throw new NotFoundException(`L'identifiant "${id}" n'est pas un ID valide.`);
+  }
+    const movie = await this.movieModel.findById(id).exec();
+    if (!movie) {
+      throw new NotFoundException(`Le film avec l'ID ${id} n'existe pas.`);
+    }
+    return movie;
+  }
 }
+

@@ -37,4 +37,9 @@ export class MoviesController {
   async deleteMovie(@Param('id') id: string) {
     return this.moviesService.delete(id);
   }
+
+    @Get(':id')
+  async getMovieById(@Param('id') id: string) {
+    return this.moviesService.findById(id); 
+  }
 }

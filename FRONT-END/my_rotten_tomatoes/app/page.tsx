@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Header from "@/components/home/Header";
 import Hero from "@/components/home/Hero";
 import MovieSection from "@/components/home/MovieSection";
+import PopularMovies from "@/components/home/PopularMovies";
 
 type Movie = {
   _id: string;
@@ -33,6 +34,7 @@ export default function Home() {
         title="Mes Films (TMDB)" 
         movies={myMovies} 
       />
+      <PopularMovies />
     </main>
   );
 }

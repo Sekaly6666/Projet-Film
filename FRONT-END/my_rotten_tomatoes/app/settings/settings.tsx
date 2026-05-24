@@ -93,9 +93,7 @@ export default function SettingsPage() {
           My Rotten Tomatoes
         </Link>
 
-        <h1 className="mt-4 mb-2 fw-bold">Parametres</h1>
-        <p className="text-light">Modifiez vos informations personnelles.</p>
-
+        <h3 className="mt-4 mb-2 fw-bold">Modifiez vos informations.</h3>
         <form onSubmit={handleSubmit} className="d-flex flex-column gap-3 mt-4">
           {message && <div className="alert alert-success p-2 small">{message}</div>}
           {error && <div className="alert alert-danger p-2 small">{error}</div>}
@@ -149,7 +147,7 @@ export default function SettingsPage() {
           </div>
 
           <button type="submit" className="btn btn-danger fw-bold py-3" disabled={loading}>
-            {loading ? "Enregistrement..." : "Enregistrer"}
+            {loading ? "Enregistrement..." : "Mettre à jour"}
           </button>
 
           <Link href="/" className="btn btn-outline-light fw-bold py-3">
