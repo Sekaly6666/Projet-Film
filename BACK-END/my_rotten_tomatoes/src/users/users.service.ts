@@ -1,4 +1,11 @@
-import { HttpException, HttpStatus, Injectable, ConflictException, UnauthorizedException, NotFoundException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  ConflictException,
+  UnauthorizedException,
+  NotFoundException,
+} from '@nestjs/common';
 import { RegisterDto } from '../auth/dto/register.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
@@ -15,17 +22,14 @@ export class UsersService {
   async create(registerDto: RegisterDto) {
     const { username, email, password } = registerDto;
 
-  
     const newusercreate = await this.userModel.findOne({ email });
     if (newusercreate) {
       throw new ConflictException('Cet email est déjà utilisé');
     }
 
-
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-   
     const newUser = new this.userModel({
       username,
       email,
@@ -33,7 +37,6 @@ export class UsersService {
       role: 'user',
     });
 
-   
     const savedUser = await newUser.save();
     return savedUser;
   }
@@ -63,7 +66,7 @@ update(id: string, updateUserDto: UpdateUserDto) {
   // remove(id: string) {
   //   return this.userModel.findByIdAndDelete(id);
   // }
-async remove(id: string) {
+  async remove(id: string) {
     const deletedUser = await this.userModel.findByIdAndDelete(id).exec();
     if (!deletedUser) {
       throw new NotFoundException('Utilisateur introuvable');
@@ -71,11 +74,20 @@ async remove(id: string) {
     return { message: 'Utilisateur supprimé avec succès' };
   }
 
- async login(loginDto: LoginDto) {
+  async login(loginDto: LoginDto) {
     const { email, password } = loginDto;
     const user = await this.userModel.findOne({ email }).select('+password');
     if (!user) {
       throw new UnauthorizedException('Identifiants incorrects');
     }
+  }
+
+  async searchUsers(query: string) {
+    if (!query) return [];
+    return this.userModel
+      .find({
+        username: { $regex: query, $options: 'i' },
+      })
+      .exec();
   }
 }

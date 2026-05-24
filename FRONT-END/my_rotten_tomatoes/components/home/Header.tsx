@@ -11,7 +11,7 @@ export default function Header() {
   const [userRole, setUserRole] = useState<string>("");
 
   useEffect(() => {
-    const isAuth = () => {
+    const isAuth = async () => {
       const token = localStorage.getItem("token");
       const user = localStorage.getItem("user");
       
@@ -21,8 +21,24 @@ if (user) {
   try {
           
     const userConnected = JSON.parse(user);
-    setUserName(userConnected.name || userConnected.username || "username");
-    setUserRole(userConnected.role || "user");
+    const userId = userConnected._id || userConnected.id;
+    let currentUser = userConnected;
+
+    if (userId) {
+      const response = await fetch(`http://localhost:3001/users/${userId}`, {
+        cache: "no-store",
+      });
+
+      if (response.ok) {
+        currentUser = await response.json();
+        localStorage.setItem("user", JSON.stringify(currentUser));
+      }
+    }
+
+    const role = currentUser.role || "user";
+    setUserName(currentUser.name || currentUser.username || "username");
+    setUserRole(role);
+    document.cookie = `role=${role}; path=/; max-age=86400; SameSite=Strict; Secure`;
   } catch {
     setUserName(user);
     setUserRole("user");
@@ -40,6 +56,7 @@ if (user) {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Strict; Secure";
+    document.cookie = "role=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Strict; Secure";
     setIsLoggedIn(false);
     setUserName("");
     setUserRole("");
@@ -73,12 +90,14 @@ if (user) {
                       <span>Paramètres</span>
                     </Link>
                   </li>
+          {userRole === "admin" && (
           <li>
                     <Link className="dropdown-item d-flex align-items-center gap-2" href="/admin/dashboard">
                       <i className="bi bi-gear-fill text-muted"></i>
                       <span>Dashboard</span>
                     </Link>
                   </li>
+          )}
                   <li>
                     <hr className="dropdown-divider" />
                   </li>

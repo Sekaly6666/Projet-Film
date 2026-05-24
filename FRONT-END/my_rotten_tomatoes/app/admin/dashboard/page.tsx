@@ -1,12 +1,20 @@
 "use client";
 import Link from 'next/link';
-import { Film, BarChart3, LogOut, ArrowUpRight, RefreshCw, Star, ShieldAlert, Home, Trash2, Loader2 } from 'lucide-react';
+import { Film, BarChart3, ArrowUpRight, RefreshCw, Star, ShieldAlert, Home, Trash2, Loader2 } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import { FaAppleAlt, FaPeopleArrows } from 'react-icons/fa';
 
 type Movie = {
   _id: string;
   title: string;
+  release_date?: string;
+  vote_average?: number;
+};
+
+type TmdbMovie = {
+  id: number;
+  title: string;
+  poster_path?: string | null;
   release_date?: string;
   vote_average?: number;
 };
@@ -18,7 +26,7 @@ export default function AdminDashboard() {
   const [currentAdminId, setCurrentAdminId] = useState<string>('');
 
   const [tmdbId, setTmdbId] = useState('');
-  const [tmdbMovies, setTmdbMovies] = useState([]);
+  const [tmdbMovies, setTmdbMovies] = useState<TmdbMovie[]>([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
@@ -138,6 +146,10 @@ useEffect(() => {
     e.preventDefault();
     if (!tmdbId.trim()) return;
 
+    importMovieById(tmdbId.trim());
+  };
+
+  const importMovieById = async (idToImport: string) => {
     setLoading(true);
     setMessage(null);
 
@@ -147,7 +159,7 @@ useEffect(() => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ tmdbId: tmdbId.trim() }),
+        body: JSON.stringify({ tmdbId: idToImport }),
       });
 
       const data = await response.json();
@@ -346,9 +358,6 @@ const CreateUser = async (e: React.FormEvent) => {
             </h1>
             <p className="text-xs text-slate-400 mt-1">Espace d'administration du site</p>
           </div>
-          <button className="p-2.5 border border-slate-200 rounded-xl hover:bg-slate-50 hover:text-red-600 transition duration-200 flex items-center justify-center shadow-sm" aria-label="Déconnexion">
-            <LogOut className="w-5 h-5 text-slate-600" />
-          </button>
         </header>
        
         <main className="p-8 max-w-7xl w-full mx-auto space-y-8">         
@@ -615,7 +624,7 @@ const CreateUser = async (e: React.FormEvent) => {
             type="email" 
             value={newEmail}
             onChange={(e) => setNewEmail(e.target.value)}
-            placeholder="Ex: john@example.com" 
+            placeholder="wecode@wecode.com" 
             className="w-full px-4 py-2 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-800 text-sm"
           />
         </div>

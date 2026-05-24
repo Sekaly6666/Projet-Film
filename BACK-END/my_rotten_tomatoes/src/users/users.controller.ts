@@ -1,14 +1,19 @@
 import {
   Controller,
   Get,
-  Post,
   Body,
   Param,
   Delete,
   Put,
+  Query,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard } from '../auth/roles/roles.guard';
+import { Role } from '../auth/roles/roles.enum';
+import { Roles } from '../auth/roles/roles.decorator';
 
 @Controller('users')
 export class UsersController {
@@ -17,6 +22,16 @@ export class UsersController {
   @Get()
   findAll() {
     return this.usersService.findAll();
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.Admin)
+  @Get('search')
+  async searchUsers(@Query('q') query: string) {
+    if (!query) {
+      return [];
+    }
+    return this.usersService.searchUsers(query);
   }
 
   @Get(':id')
