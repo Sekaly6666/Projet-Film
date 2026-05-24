@@ -93,7 +93,7 @@ if (user) {
           {userRole === "admin" && (
           <li>
                     <Link className="dropdown-item d-flex align-items-center gap-2" href="/admin/dashboard">
-                      <i className="bi bi-gear-fill text-muted"></i>
+                      <i className="bi bi-speedometer2 text-muted"></i>
                       <span>Dashboard</span>
                     </Link>
                   </li>
@@ -115,17 +115,15 @@ if (user) {
             ) : (
              
               <>
-                <Link 
-                  href="/login" 
-                  className="nav-link text-light px-2 d-flex align-items-center gap-2 border border-transparent rounded"
-                >
+  <Link href="/login" 
+  className="nav-link text-light px-2 d-flex align-items-center 
+  gap-2 border border-transparent rounded">
                   <i className="bi bi-box-arrow-in-right"></i>
                   <span>Connexion</span>
                 </Link>
-                <Link 
-                  href="/register" 
-                  className="btn btn-danger btn-sm px-3 py-2 d-flex align-items-center gap-2 rounded-pill shadow-sm"
-                >
+    <Link href="/register" 
+    className="btn btn-danger btn-sm px-3 py-2 d-flex 
+    align-items-center gap-2 rounded-pill shadow-sm">
                   <i className="bi bi-person-plus-fill"></i>
                   <span>Inscription</span>
                 </Link>

@@ -36,4 +36,24 @@ export class ComsService {
     }
     return { message: 'commentaire supprimé' };
   }
+
+async getDashboardStats() {
+    const totalAvis = await this.comsModel.countDocuments().exec();
+    const aggregateResult = await this.comsModel.aggregate([
+      {
+        $group: {
+          _id: null,
+          averageRating: { $avg: '$rating' },
+        },
+      },
+    ]).exec();
+
+    const moyenneGenerale = aggregateResult[0]?.averageRating || 0;
+
+    return {
+      totalAvis,
+      moyenneGenerale: Number(moyenneGenerale.toFixed(1)),
+    };
+  }
+
 }

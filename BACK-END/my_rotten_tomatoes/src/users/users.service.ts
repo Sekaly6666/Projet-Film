@@ -46,7 +46,6 @@ export class UsersService {
   }
 
   findAll() {
-    // return this.userModel.find();
     return this.userModel.find().select('-password').exec();
   }
 
@@ -56,16 +55,10 @@ export class UsersService {
     throw new HttpException('Utilisateur introuvable', HttpStatus.NOT_FOUND);
   }
 
-  // update(id: string, updateUserDto: UpdateUserDto) {
-  //   return this.userModel.findByIdAndUpdate(id, updateUserDto, { new: true });
-  // }
 update(id: string, updateUserDto: UpdateUserDto) {
     return this.userModel.findByIdAndUpdate(id, updateUserDto, { new: true }).exec();
   }
 
-  // remove(id: string) {
-  //   return this.userModel.findByIdAndDelete(id);
-  // }
   async remove(id: string) {
     const deletedUser = await this.userModel.findByIdAndDelete(id).exec();
     if (!deletedUser) {

@@ -3,6 +3,7 @@ import {
   HttpException,
   HttpStatus,
   NotFoundException,
+  ConflictException,
   Param,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -37,6 +38,7 @@ export class MoviesService {
       const tmdbMovie = response.data;
 
       const newMovie = new this.movieModel({
+        tmdbId: tmdbMovie.id,
         title: tmdbMovie.title,
         overview: tmdbMovie.overview,
         poster_path: tmdbMovie.poster_path,
@@ -50,7 +52,13 @@ export class MoviesService {
         "Détail de l'erreur :",
         error.response?.data || error.message,
       );
-      throw new HttpException(
+
+      if (error.code === 11000){
+        throw new ConflictException('Ce film a déjà été importé.');
+      }
+        
+        
+        throw new HttpException(
         "Impossible d'importer le film depuis TMDB.",
         HttpStatus.BAD_REQUEST,
       );
