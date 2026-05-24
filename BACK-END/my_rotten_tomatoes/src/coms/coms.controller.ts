@@ -39,4 +39,9 @@ export class ComsController {
   remove(@Param('id') id: string) {
     return this.comsService.remove(id);
   }
+@Get('dashboard/stats')
+async getStats() {
+  return this.comsService.getDashboardStats();
+}
+
 }

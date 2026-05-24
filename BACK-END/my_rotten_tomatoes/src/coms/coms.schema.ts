@@ -13,6 +13,9 @@ export class Coms {
 
   @Prop({ required: true })
   commentaires!: string;
+
+  @Prop({ required: true, min: 0, max: 10 })
+  rating!: number;
 }
 
 export const ComsSchema = SchemaFactory.createForClass(Coms);

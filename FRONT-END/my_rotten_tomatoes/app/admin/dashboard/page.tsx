@@ -1,6 +1,6 @@
 "use client";
 import Link from 'next/link';
-import { Film, BarChart3, ArrowUpRight, RefreshCw, Star, ShieldAlert, Home, Trash2, Loader2 } from 'lucide-react';
+import { Film, BarChart3, ArrowUpRight, RefreshCw, Star, Home, Trash2, Loader2 } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import { FaAppleAlt, FaPeopleArrows } from 'react-icons/fa';
 
@@ -18,9 +18,16 @@ type TmdbMovie = {
   release_date?: string;
   vote_average?: number;
 };
+type DashboardStats = {
+  totalAvis: number;
+  moyenneGenerale: number;
+};
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('stats');
+  const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [loadingStats, setLoadingStats] = useState(true);
+
   const [users, setUsers] = useState<any[]>([]);
   const [loadingUsers, setLoadingUsers] = useState<boolean>(false);
   const [currentAdminId, setCurrentAdminId] = useState<string>('');
@@ -40,6 +47,21 @@ const [confirmPasswordInput, setConfirmPasswordInput] = useState('');
 const [newRole, setNewRole] = useState('user');
 const [loadingCreate, setLoadingCreate] = useState(false);
 
+const fetchDashboardStats = async () => {
+    setLoadingStats(true);
+    try {
+      const res = await fetch('http://localhost:3001/coms/dashboard/stats', { cache: 'no-store' });
+      if (res.ok) {
+        const data = await res.json();
+        setStats(data);
+      }
+    } catch (error) {
+      console.error("Erreur de récupération des KPI :", error);
+    } finally {
+      setLoadingStats(false);
+    }
+  };
+
   
 
  
@@ -53,6 +75,7 @@ const [loadingCreate, setLoadingCreate] = useState(false);
       console.error("Vous n'avrez pas les privilèges de suppression", e);
     }
   }
+  fetchDashboardStats();
 }, []);
 
 
@@ -114,8 +137,10 @@ useEffect(() => {
     fetchMovies();
    
   } else if (activeTab === 'users') {
-    fetchUsers();
-  }
+    fetchUsers(); 
+  } else if (activeTab === 'stats') {
+      fetchDashboardStats();
+    }
 }, [activeTab]);
 
 
@@ -341,7 +366,7 @@ const CreateUser = async (e: React.FormEvent) => {
         <div className="p-4 border-t border-red-900/50 bg-red-950/80 text-xs text-red-200 flex items-center justify-between">
           <div>
             <p className="font-semibold text-white">Admin</p>
-            <p className="opacity-60">admin@tomates.com</p>
+            <p className="opacity-60">admin@wecode</p>
           </div>
           <span className="bg-green-500 w-2.5 h-2.5 rounded-full ring-4 ring-green-500/20"></span>
         </div>
@@ -374,34 +399,52 @@ const CreateUser = async (e: React.FormEvent) => {
 
         
           {activeTab === 'stats' && (
-            <>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-xl flex flex-col justify-between min-h-[140px]">
-                  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Note Moyenne Générale</p>
-                  <p className="text-4xl font-black text-white my-2">7.8 <span className="text-sm font-normal text-slate-500">/10</span></p>
-                  <div className="flex items-center gap-1.5 self-start text-xs font-semibold text-emerald-400 bg-emerald-950/50 px-2.5 py-1 rounded-lg border border-emerald-900/50">
-                    <BarChart3 className="w-3.5 h-3.5" /> <span>Stable ce mois</span>
-                  </div>
-                </div>
-                
-                <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-xl flex flex-col justify-between min-h-[140px]">
-                  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Critiques Rédigées</p>
-                  <p className="text-4xl font-black text-white my-2">1 420</p>
-                  <div className="flex items-center gap-1.5 self-start text-xs font-semibold text-emerald-400 bg-emerald-950/50 px-2.5 py-1 rounded-lg border border-emerald-900/50">
-                    <ArrowUpRight className="w-3.5 h-3.5" /> <span>+14% d'avis</span>
-                  </div>
-                </div>
-                
-      <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-xl flex flex-col justify-between min-h-[140px]">
-        <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Films Référencés</p>
-        <p className="text-4xl font-black text-white my-2">{movies.length || 348}</p>
-        <div className="flex items-center gap-1.5 self-start text-xs font-semibold text-slate-400 bg-slate-800 px-2.5 py-1 rounded-lg border border-slate-700/50">
-          <RefreshCw className="w-3.5 h-3.5 " /> <span>Synchronisé avec TMDB</span>
+  <>
+    {loadingStats ? (
+      <div className="flex items-center justify-center p-12 text-slate-400 gap-2">
+        <RefreshCw className="w-5 h-5 animate-spin text-warning" />
+        <span className="text-sm font-medium">Veuillez patienter svp, Calcul des indicateurs en cours...</span>
+      </div>
+    ) : (
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+       
+        <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-xl flex flex-col justify-between min-h-[140px]">
+          <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Note Moyenne Générale</p>
+          <p className="text-4xl font-black text-white my-2">
+            {stats?.moyenneGenerale ?? 0} <span className="text-sm font-normal text-slate-500">/10</span>
+          </p>
+          <div className="flex items-center gap-1.5 self-start text-xs font-semibold text-emerald-400 bg-emerald-950/50 px-2.5 py-1 rounded-lg border border-emerald-900/50">
+            <BarChart3 className="w-3.5 h-3.5" /> <span>Stable ce mois</span>
           </div>
         </div>
+        
+       
+        <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-xl flex flex-col justify-between min-h-[140px]">
+          <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Critiques Rédigées</p>
+          <p className="text-4xl font-black text-white my-2">
+            {stats?.totalAvis ?? 0}
+          </p>
+          <div className="flex items-center gap-1.5 self-start text-xs font-semibold text-emerald-400 bg-emerald-950/50 px-2.5 py-1 rounded-lg border border-emerald-900/50">
+            <ArrowUpRight className="w-3.5 h-3.5" /> <span>Avis unifiés</span>
+          </div>
+        </div>
+        
+        <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-xl flex flex-col justify-between min-h-[140px]">
+          <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Films Référencés</p>
+          <p className="text-4xl font-black text-white my-2">
+            {movies.length}
+          </p>
+          <div className="flex items-center gap-1.5 self-start text-xs font-semibold text-slate-400 bg-slate-800 px-2.5 py-1 rounded-lg border border-slate-700/50">
+            <RefreshCw className="w-3.5 h-3.5" /> <span>Synchronisé avec TMDB</span>
+          </div>
+        </div>
+
       </div>
-            </>
-          )}
+    )}
+  </>
+)}
+
 
           
           {activeTab === 'movies' && (
@@ -418,16 +461,15 @@ const CreateUser = async (e: React.FormEvent) => {
                     value={tmdbId}
                     onChange={(e) => setTmdbId(e.target.value)}
                   />
-                  <button 
-                    type="submit" 
-                    disabled={loading}
-                    className="bg-red-500 hover:bg-red-600 disabled:bg-slate-300 text-white font-semibold text-sm px-6 py-3 rounded-xl transition shadow-md shadow-red-500/10 flex items-center gap-2 whitespace-nowrap"
-                  >
+  <button type="submit" disabled={loading}
+    className="bg-red-500 hover:bg-red-600 disabled:bg-slate-300 
+    text-white font-semibold text-sm px-6 py-3 rounded-xl transition shadow-md 
+    shadow-red-500/10 flex items-center gap-2 whitespace-nowrap">
                     {loading && <Loader2 className="w-4 h-4 animate-spin" />}
                     <span>Rechercher & Importer</span>
-                  </button>
-                </form>
-              </div>
+    </button>
+    </form>
+    </div>
 
              
               <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
@@ -463,17 +505,20 @@ const CreateUser = async (e: React.FormEvent) => {
                               </span>
                             </td>
                             <td className="py-3.5 px-4 text-right">
-                              <button
-                                onClick={() => DeleteMovie(movie._id, movie.title)}
-                                className="inline-flex items-center gap-1.5 text-xs font-semibold text-rose-600 hover:text-white bg-rose-50 hover:bg-rose-600 border border-rose-100 hover:border-rose-600 px-3 py-1.5 rounded-xl transition duration-200 shadow-sm"
-                              >
-                                <Trash2 className="w-3.5 h-3.5" />
-                                <span>Supprimer</span>
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
+    <button
+      onClick={() => DeleteMovie(movie._id, movie.title)}
+      className="inline-flex items-center gap-1.5 
+      text-xs font-semibold text-rose-600 
+      hover:text-white bg-rose-50 hover:bg-rose-600 border 
+      border-rose-100 hover:border-rose-600 px-3 py-1.5 rounded-xl 
+      transition duration-200 shadow-sm">
+                    <Trash2 className="w-3.5 h-3.5" />
+                    <span>Supprimer</span>
+                  </button>
+                </td>
+              </tr>
+            ))}
+              </tbody>
                     </table>
                   </div>
                 )}
@@ -505,10 +550,11 @@ const CreateUser = async (e: React.FormEvent) => {
 
 
 
-        <div 
-          key={tmdbMovie.id} 
-          className="group relative flex flex-col bg-slate-50 border border-slate-100 rounded-2xl overflow-hidden hover:shadow-md hover:border-slate-200 transition duration-200"
-        >
+        <div key={tmdbMovie.id} 
+          className="group relative 
+          flex flex-col bg-slate-50 
+          border border-slate-100 rounded-2xl 
+          overflow-hidden hover:shadow-md hover:border-slate-200 transition duration-200">
         
           <div className="relative aspect-[2/3] w-full bg-slate-200 overflow-hidden">
             {tmdbMovie.poster_path ? (
@@ -614,8 +660,9 @@ const CreateUser = async (e: React.FormEvent) => {
             value={newUsername}
             onChange={(e) => setNewUsername(e.target.value)}
             placeholder="Ex: JohnDoe" 
-            className="w-full px-4 py-2 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-800 text-sm"
-          />
+            className="w-full px-4 py-2 
+            border border-slate-200 rounded-xl focus:outline-none 
+            focus:ring-2 focus:ring-red-800 text-sm" />
         </div>
 
         <div>
@@ -636,8 +683,8 @@ const CreateUser = async (e: React.FormEvent) => {
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
             placeholder="••••••••" 
-            className="w-full px-4 py-2 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-800 text-sm"
-          />
+            className="w-full px-4 py-2 border border-slate-200 
+            rounded-xl focus:outline-none focus:ring-2 focus:ring-red-800 text-sm"/>
         </div>
 
    <div>
@@ -658,8 +705,9 @@ const CreateUser = async (e: React.FormEvent) => {
           <button 
             type="submit" 
             disabled={loadingCreate}
-            className="bg-red-800 hover:bg-red-900 text-white font-semibold px-5 py-2 rounded-xl transition duration-200 text-sm h-[38px] disabled:opacity-50 shrink-0"
-          >
+            className="bg-red-800 hover:bg-red-900 
+            text-white font-semibold px-5 py-2 rounded-xl 
+            transition duration-200 text-sm h-[38px] disabled:opacity-50 shrink-0">
             {loadingCreate ? 'Création...' : 'Créer'}
           </button>
         </div>
@@ -705,12 +753,10 @@ const CreateUser = async (e: React.FormEvent) => {
               const Mine = user._id === currentAdminId;
               
               return (
-                <tr 
-                  key={user._id} 
+                <tr key={user._id} 
                   className={`hover:bg-slate-50/80 transition duration-150 ${
                     Mine ? 'bg-amber-50/30 hover:bg-amber-50/50' : ''
-                  }`}
-                >
+                  }`}>
                   
                   <td className="py-3.5 px-4 font-semibold text-slate-900">
                     {user.username || "Non renseigné"}
@@ -756,27 +802,25 @@ const CreateUser = async (e: React.FormEvent) => {
   </button>
 
                       
-                      <button
-                        onClick={() => DeleteUser(user._id, user.email)}
-                        disabled={Mine}
-                        title={Mine ? "Vous ne pouvez pas supprimer votre propre session" : "Supprimer ce compte"}
-                        className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-xl transition duration-150 shadow-sm ${
-                          Mine 
-                            ? 'bg-slate-100 text-slate-300 cursor-not-allowed border-none shadow-none' 
-                            : 'text-rose-600 hover:text-white bg-rose-50 hover:bg-rose-600 border border-rose-100 hover:border-rose-600'
-                        }`}
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                        <span>Supprimer</span>
-                      </button>
+  <button onClick={() => DeleteUser(user._id, user.email)}
+      disabled={Mine}
+  title={Mine ? "Vous ne pouvez pas supprimer votre propre session" : "Supprimer ce compte"}
+  className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-xl transition duration-150 shadow-sm ${
+    Mine 
+      ? 'bg-slate-100 text-slate-300 cursor-not-allowed border-none shadow-none' 
+      : 'text-rose-600 hover:text-white bg-rose-50 hover:bg-rose-600 border border-rose-100 hover:border-rose-600'
+  }`}>
+          <Trash2 className="w-3.5 h-3.5" />
+          <span>Supprimer</span>
+        </button>
 
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+              </div>
+            </td>
+          </tr>
+        );
+      })}
+    </tbody>
+  </table>
       </div>
     )}
   </div>
