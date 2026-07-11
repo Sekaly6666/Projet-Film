@@ -59,7 +59,7 @@ useEffect(() => {
         : "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7",
         overview: movie.overview,
       rating: movie.vote_average,
-      releaseDate: movie.release_date,
+      release_date: movie.release_date,
     }} 
   />
 ))}
