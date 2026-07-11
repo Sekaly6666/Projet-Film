@@ -58,7 +58,7 @@ export default function MoviesPage({ searchParams }: MoviesPageProps) {
 
     const fetchMovies = async () => {
       try {
-        const res = await fetch("http://localhost:3001/movies");
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/movies`);
         if (res.ok) {
           const data = await res.json();
           setAllMovies(data);
@@ -83,8 +83,8 @@ export default function MoviesPage({ searchParams }: MoviesPageProps) {
     const fetchMovieFeedback = async () => {
       try {
         const [notesResponse, commentsResponse] = await Promise.all([
-          fetch(`http://localhost:3001/notes/movie/${movieId}`),
-          fetch(`http://localhost:3001/coms/movie/${movieId}`),
+          fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/notes/movie/${movieId}`),
+          fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/coms/movie/${movieId}`),
         ]);
 
         if (notesResponse.ok) {

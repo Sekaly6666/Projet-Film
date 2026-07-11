@@ -18,7 +18,7 @@ export default function Home() {
   const [myMovies, setMyMovies] = useState<Movie[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:3001/movies")
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/movies`)
       .then((res) => res.json())
       .then((data) => setMyMovies(data))
       .catch((err) => console.error("Erreur de récupération des films :", err));

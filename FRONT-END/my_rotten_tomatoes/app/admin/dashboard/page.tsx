@@ -50,7 +50,7 @@ const [loadingCreate, setLoadingCreate] = useState(false);
 const fetchDashboardStats = async () => {
     setLoadingStats(true);
     try {
-      const res = await fetch('http://localhost:3001/coms/dashboard/stats', { cache: 'no-store' });
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/coms/dashboard/stats`, { cache: 'no-store' });
       if (res.ok) {
         const data = await res.json();
         setStats(data);
@@ -82,7 +82,7 @@ const fetchDashboardStats = async () => {
   const fetchMovies = async () => {
   setLoadingMovies(true);
   try {
-    const res = await fetch('http://localhost:3001/movies', { cache: 'no-store' });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/movies`, { cache: 'no-store' });
     if (res.ok) {
       const data = await res.json();
       setMovies(data);
@@ -119,7 +119,7 @@ const fetchAllMovies = async () => {
 const fetchUsers = async () => {
   setLoadingUsers(true);
   try {
-    const res = await fetch('http://localhost:3001/users', { cache: 'no-store' });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/users`, { cache: 'no-store' });
     if (res.ok) {
       const data = await res.json();
       setUsers(data);
