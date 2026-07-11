@@ -9,6 +9,7 @@ interface Movie {
   poster_path: string;
   release_date: string;
   vote_average: number;
+  overview?: string;
 }
 
 export default function PopularMovies() {
