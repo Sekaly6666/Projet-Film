@@ -7,14 +7,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
 
   app.enableCors({
-    origin: (origin, callback) => {
-      const isLocalFront =
-        !origin ||
-        origin.startsWith('http://localhost:') ||
-        origin.startsWith('http://127.0.0.1:');
-
-      callback(null, isLocalFront);
-    },
+    origin: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
